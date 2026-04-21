@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-32 text-center">
+  <h1 class="text-6xl font-extrabold text-brand">404</h1>
+  <p class="mt-4 text-stone-600">The page you're looking for doesn't exist.</p>
+  <a href="{{ url_for('home') }}" class="inline-block mt-6 bg-brand text-white px-6 py-3 rounded-full font-semibold">Go Home</a>
+</div>
+{% endblock %}

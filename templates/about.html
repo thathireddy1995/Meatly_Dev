@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}About — Meatly{% endblock %}
+{% block content %}
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <span class="text-brand font-semibold">Our Story</span>
+  <h1 class="text-4xl md:text-5xl font-extrabold mt-2">Meat you can trust, every single day.</h1>
+  <p class="mt-6 text-lg text-stone-700 leading-relaxed">Meatly was started in 2021 by a team of food scientists and butchers who were tired of guessing where their meat came from. Today we run our own farms, processing centers and cold-chain — so you get the freshest, safest meat, every order.</p>
+  <img src="{{ url_for('static', filename='images/about-quality.jpg') }}" class="w-full rounded-3xl mt-10 shadow-lg" alt="Quality">
+  <div class="mt-12 grid md:grid-cols-3 gap-6">
+    {% for n, t in [('1M+','Happy families'),('90 min','Avg delivery time'),('100%','Antibiotic-residue-free')] %}
+    <div class="p-6 rounded-2xl bg-white shadow-sm text-center">
+      <div class="text-3xl font-extrabold text-brand">{{ n }}</div>
+      <div class="text-stone-600 mt-1">{{ t }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

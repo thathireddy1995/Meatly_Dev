@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Contact — Meatly{% endblock %}
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 py-16">
+  <h1 class="text-4xl font-extrabold">Get in touch</h1>
+  <p class="text-stone-600 mt-2">Questions about an order, a product, or wholesale? We'd love to hear from you.</p>
+  <div class="mt-10 grid md:grid-cols-2 gap-8">
+    <form method="post" class="bg-white p-6 rounded-2xl shadow-sm space-y-4">
+      <input required name="name" placeholder="Your name" class="w-full px-4 py-3 border rounded-xl">
+      <input required type="email" name="email" placeholder="Email" class="w-full px-4 py-3 border rounded-xl">
+      <textarea required name="message" placeholder="How can we help?" rows="5" class="w-full px-4 py-3 border rounded-xl"></textarea>
+      <button class="w-full bg-brand text-white py-3 rounded-full font-bold hover:bg-brand-dark">Send Message</button>
+    </form>
+    <div class="space-y-5">
+      <div class="bg-white p-5 rounded-2xl shadow-sm"><div class="font-bold">Customer support</div><div class="text-stone-600 text-sm mt-1">support@meatly.example · 1800-123-4567</div></div>
+      <div class="bg-white p-5 rounded-2xl shadow-sm"><div class="font-bold">FAQ</div>
+        <details class="mt-3 text-sm"><summary class="cursor-pointer font-semibold">When will my order arrive?</summary><p class="mt-2 text-stone-600">Within 90 minutes for most pin codes.</p></details>
+        <details class="mt-3 text-sm"><summary class="cursor-pointer font-semibold">Is the meat antibiotic-free?</summary><p class="mt-2 text-stone-600">Yes, every batch is lab-tested.</p></details>
+        <details class="mt-3 text-sm"><summary class="cursor-pointer font-semibold">How is freshness ensured?</summary><p class="mt-2 text-stone-600">End-to-end cold chain from farm to door.</p></details>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

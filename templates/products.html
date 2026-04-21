@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Shop — Meatly{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <h1 class="text-3xl md:text-4xl font-extrabold mb-6">Shop fresh meat</h1>
+  <form method="get" class="flex flex-wrap gap-3 mb-8 bg-white p-4 rounded-2xl shadow-sm">
+    <input name="q" value="{{ q }}" placeholder="Search products..." class="flex-1 min-w-[200px] px-4 py-2.5 rounded-full border border-stone-300 focus:outline-none focus:border-brand">
+    <select name="cat" class="px-4 py-2.5 rounded-full border border-stone-300">
+      <option value="">All categories</option>
+      {% for c in categories %}<option value="{{ c.id }}" {% if c.id == cat %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+    </select>
+    <select name="sort" class="px-4 py-2.5 rounded-full border border-stone-300">
+      <option value="popular" {% if sort=='popular' %}selected{% endif %}>Popular</option>
+      <option value="price-asc" {% if sort=='price-asc' %}selected{% endif %}>Price: Low → High</option>
+      <option value="price-desc" {% if sort=='price-desc' %}selected{% endif %}>Price: High → Low</option>
+      <option value="rating" {% if sort=='rating' %}selected{% endif %}>Top Rated</option>
+    </select>
+    <button class="bg-brand text-white px-6 py-2.5 rounded-full font-semibold hover:bg-brand-dark">Apply</button>
+  </form>
+  {% if items %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    {% for p in items %}{% include "_product_card.html" %}{% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-20 text-stone-500">No products match your search.</div>
+  {% endif %}
+</div>
+{% endblock %}

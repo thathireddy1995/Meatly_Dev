@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ p.name }} — Meatly{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <a href="{{ url_for('products') }}" class="text-sm text-brand hover:underline">← Back to shop</a>
+  <div class="mt-6 grid md:grid-cols-2 gap-10">
+    <div class="rounded-3xl overflow-hidden bg-white shadow-sm">
+      <img src="{{ url_for('static', filename='images/' ~ p.image) }}" class="w-full aspect-square object-cover" alt="{{ p.name }}">
+    </div>
+    <div>
+      <div class="text-sm text-stone-500 uppercase tracking-wide">{{ p.category }}</div>
+      <h1 class="text-3xl md:text-4xl font-extrabold mt-1">{{ p.name }}</h1>
+      <div class="text-stone-500 mt-2">{{ p.weight }} · ★ {{ p.rating }} ({{ p.reviews }} reviews)</div>
+      <div class="mt-5 flex items-baseline gap-3">
+        <span class="text-3xl font-extrabold text-brand">₹{{ p.price }}</span>
+        {% if p.mrp > p.price %}<span class="text-stone-400 line-through">₹{{ p.mrp }}</span>
+        <span class="text-green-600 font-semibold text-sm">{{ ((p.mrp - p.price) / p.mrp * 100) | round(0, 'floor') | int }}% OFF</span>{% endif %}
+      </div>
+      <p class="mt-5 text-stone-700 leading-relaxed">{{ p.description }}</p>
+      <form action="{{ url_for('cart_add', product_id=p.id) }}" method="post" class="mt-7 flex gap-3">
+        <input type="number" name="qty" value="1" min="1" max="10" class="w-20 px-4 py-3 rounded-full border border-stone-300 text-center">
+        <button class="flex-1 bg-brand text-white py-3 rounded-full font-semibold hover:bg-brand-dark transition">Add to Cart</button>
+      </form>
+      <div class="mt-8 grid grid-cols-3 gap-3 text-xs text-center">
+        {% for t in ['Cold-chain delivery','Antibiotic-free','100% fresh'] %}
+        <div class="p-3 rounded-xl bg-brand-cream border border-stone-200 font-semibold">{{ t }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% if related %}
+  <div class="mt-16">
+    <h2 class="text-2xl font-extrabold mb-6">You may also like</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for p in related %}{% include "_product_card.html" %}{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

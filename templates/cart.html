@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Your Cart — Meatly{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <h1 class="text-3xl md:text-4xl font-extrabold mb-8">Your Cart</h1>
+  {% if items %}
+  <div class="grid lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 space-y-4">
+      {% for it in items %}
+      <div class="flex gap-4 bg-white p-4 rounded-2xl shadow-sm">
+        <img src="{{ url_for('static', filename='images/' ~ it.image) }}" class="w-24 h-24 object-cover rounded-xl" alt="{{ it.name }}">
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold">{{ it.name }}</div>
+          <div class="text-xs text-stone-500">{{ it.weight }}</div>
+          <div class="mt-2 font-bold text-brand">₹{{ it.price }} <span class="text-stone-400 text-xs font-normal">× {{ it.qty }} = ₹{{ it.line_total }}</span></div>
+          <form action="{{ url_for('cart_update', product_id=it.id) }}" method="post" class="mt-2 flex items-center gap-2">
+            <input type="number" name="qty" value="{{ it.qty }}" min="0" max="20" class="w-16 px-2 py-1 border rounded text-center text-sm">
+            <button class="text-xs text-brand font-semibold hover:underline">Update</button>
+          </form>
+        </div>
+        <form action="{{ url_for('cart_remove', product_id=it.id) }}" method="post">
+          <button class="text-stone-400 hover:text-red-600 text-sm">Remove</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    <aside class="bg-white p-6 rounded-2xl shadow-sm h-fit sticky top-24">
+      <h2 class="font-bold text-lg mb-4">Order Summary</h2>
+      <div class="space-y-2 text-sm">
+        <div class="flex justify-between"><span>Subtotal</span><span>₹{{ subtotal }}</span></div>
+        {% if savings %}<div class="flex justify-between text-green-600"><span>You save</span><span>– ₹{{ savings }}</span></div>{% endif %}
+        {% if discount %}<div class="flex justify-between text-green-600"><span>Coupon ({{ coupon }})</span><span>– ₹{{ discount }}</span></div>{% endif %}
+        <div class="flex justify-between"><span>Delivery</span><span>{% if delivery %}₹{{ delivery }}{% else %}<span class="text-green-600">FREE</span>{% endif %}</span></div>
+        <div class="border-t pt-3 mt-3 flex justify-between font-bold text-lg"><span>Total</span><span>₹{{ total }}</span></div>
+      </div>
+      <form action="{{ url_for('cart_coupon') }}" method="post" class="mt-5 flex gap-2">
+        <input name="code" placeholder="Coupon code" class="flex-1 px-3 py-2 border rounded-full text-sm">
+        <button class="bg-stone-900 text-white px-4 py-2 rounded-full text-sm font-semibold">Apply</button>
+      </form>
+      <p class="text-xs text-stone-500 mt-2">Try <b>FRESH10</b> for 10% off</p>
+      <button class="mt-5 w-full bg-brand text-white py-3 rounded-full font-bold hover:bg-brand-dark transition">Checkout</button>
+    </aside>
+  </div>
+  {% else %}
+  <div class="text-center py-20 bg-white rounded-2xl">
+    <p class="text-stone-500 mb-5">Your cart is empty.</p>
+    <a href="{{ url_for('products') }}" class="bg-brand text-white px-6 py-3 rounded-full font-semibold">Start shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
