@@ -111,6 +111,8 @@ def login():
 @login_required
 def logout():
     logout_user()
+    session.pop("cart", None)
+    session.pop("coupon", None)
     flash("You have been logged out.", "success")
     return redirect(url_for("home"))
 
