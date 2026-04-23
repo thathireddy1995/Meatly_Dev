@@ -9,6 +9,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     name = db.Column(db.String(100), nullable=False)
+    cart_data = db.Column(db.Text, nullable=True) # JSON string
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

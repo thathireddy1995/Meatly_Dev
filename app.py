@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from products import PRODUCTS, CATEGORIES, get_product, related_products
 from models import db, User
 import os
+import json
 
 app = Flask(__name__)
 app.secret_key = "meatly-dev-secret-change-me"
@@ -28,6 +29,12 @@ COUPONS = {"FRESH10": 0.10}
 
 def get_cart():
     return session.setdefault("cart", {})
+
+
+def save_cart():
+    if current_user.is_authenticated:
+        current_user.cart_data = json.dumps(get_cart())
+        db.session.commit()
 
 
 def cart_summary():
@@ -100,6 +107,18 @@ def login():
         
         if user and user.check_password(password):
             login_user(user)
+            
+            # Load cart from DB
+            if user.cart_data:
+                try:
+                    db_cart = json.loads(user.cart_data)
+                    # Merge guest cart with DB cart or just replace? 
+                    # Let's replace for simplicity as requested, or merge.
+                    # User likely wants their saved cart back.
+                    session["cart"] = db_cart
+                except json.JSONDecodeError:
+                    pass
+            
             flash(f"Welcome back, {user.name}!", "success")
             next_page = request.args.get("next")
             return redirect(next_page or url_for("home"))
@@ -164,6 +183,7 @@ def cart_add(product_id):
     qty = int(request.form.get("qty", 1))
     cart[product_id] = cart.get(product_id, 0) + qty
     session.modified = True
+    save_cart()
     flash(f"Added {p['name']} to cart", "success")
     if request.headers.get("X-Requested-With") == "fetch":
         return jsonify({"ok": True, "count": sum(cart.values())})
@@ -179,6 +199,7 @@ def cart_update(product_id):
     else:
         cart[product_id] = qty
     session.modified = True
+    save_cart()
     return redirect(url_for("cart_view"))
 
 
@@ -186,6 +207,7 @@ def cart_update(product_id):
 def cart_remove(product_id):
     get_cart().pop(product_id, None)
     session.modified = True
+    save_cart()
     return redirect(url_for("cart_view"))
 
 
